@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<configuration>
+
+<layoutversion>1</layoutversion>
+
+<schemas>
+<schema id="RS-2-1-1k">
+	<codec>rs</codec>
+	<k>2</k>
+	<m>1</m>
+</schema>
+</schemas>
+
+<policies>
+<policy>
+	<schema>RS-2-1-1k</schema>
+	<cellsize>1048576</cellsize>
+	</policy>
+</policies>
+</configuration>
