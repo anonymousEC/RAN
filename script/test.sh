@@ -144,6 +144,7 @@ test_all_e()
     ./start_client.sh -rfte "${1}MB_repair" "${1}MB_dst" | tee "${2}/eft"
     ./start_client.sh -rfre "${1}MB_repair" "${1}MB_dst" | tee "${2}/efr"
     ./start_client.sh -rfee "${1}MB_repair" "${1}MB_dst" | tee "${2}/efe"
+    sleep 3
     ./start_client.sh -rfne "${1}MB_repair" "${1}MB_dst" | tee "${2}/efn"
 }
 
