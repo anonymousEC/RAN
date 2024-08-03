@@ -1,10 +1,14 @@
 #!/usr/bin/expect
 
-set timeout 20
-set password "6930760208y"
+if {[llength $argv] < 3} {
+    puts "Usage: $argv0 <password> <start> <end>"
+    exit 1
+}
 
-set start [lindex $argv 0]
-set end [lindex $argv 1]
+set timeout 20
+set password [lindex $argv 0]
+set start [lindex $argv 1]
+set end [lindex $argv 2]
 set ipBase "192.168.7."
 
 set hosts ""
@@ -31,4 +35,5 @@ foreach host $hosts {
             }
         }
     }
+    sleep 2
 }
