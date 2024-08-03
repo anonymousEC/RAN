@@ -37,5 +37,10 @@ ${SCRIPT_DIR}/same_command.sh ${START_NODE} ${END_NODE} "cd ~ && tar -zxvf proto
 cp -r ${BASE_DIR}/RAN/HDFS_integrate/hadoop-common-project/ ${HADOOP_SRC_DIR}/
 cp -r ${BASE_DIR}/RAN/HDFS_integrate/hadoop-hdfs-project/ ${HADOOP_SRC_DIR}/
 
+# install docker
+apt install -y docker.io
+systemctl start docker
+systemctl enable docker
+
 # Return to the original directory
 cd ${CURRENT_DIR}
