@@ -126,7 +126,7 @@ int RANFullRecoverSolveLP(int selectNodesIndexArr[][EC_N + MUL_FAIL_NUM - 1], in
 
     glp_prob *lp;
     lp = glp_create_prob();
-    glp_set_prob_name(lp, "optimal_repair_throughput_FR");
+    glp_set_prob_name(lp, "RAN_throughput_FR");
     glp_set_obj_dir(lp, GLP_MIN); // Set to minimize the objective function
 
     /* Add right-hand side results for constraints */
@@ -290,7 +290,7 @@ int RANMulFullRecoverSolveLP(int selectNodesIndexArr[][EC_N + MUL_FAIL_NUM - 1],
 
     glp_prob *lp;
     lp = glp_create_prob();
-    glp_set_prob_name(lp, "optimal_repair_throughput_FR");
+    glp_set_prob_name(lp, "RAN_throughput_FR");
     glp_set_obj_dir(lp, GLP_MIN); // Set to minimize the objective function
 
     /* Add right-hand side results for constraints */

@@ -324,7 +324,7 @@ void *handleFullRecoverN(netMeta_t *netMeta, int clientFd)
     char fullRecoverFailBlockName[EC_A][HDFS_MAX_BP_COUNT][MAX_PATH_LEN];
     if (netMeta->mulFailFlag == 0)
     {
-        create3PointerArrUC(&g_tblsBuf, &g_tblsArr, &g_tbls2Arr, stripeNum, maxDivisionNum, EC_K * 32);
+        create4PointerArrUC(&g_tblsBuf, &g_tblsArr, &g_tbls2Arr,&g_tbls3Arr,1, stripeNum, maxDivisionNum, EC_K * 32);
         curOffset = +unpackedDataFullRecoverN2(netDataBuf + curOffset, stripeNum, maxDivisionNum, twoBucketsSliceIndexInfo, divisionLines,
                                                divisionNum, fullRecoverFailBlockName, g_tbls2Arr[0][0]);
     }

@@ -17,7 +17,7 @@ import java.net.*;
 // RAN-end
 
 /**
- * OptimalReairReconstructor, similar to StripedBlockReconstructor
+ * RANReconstructor, similar to StripedBlockReconstructor
  * support two following mode
  * 1. chunk reconstructor: reconstruct one striped block of one node in the
  * striped block group
@@ -35,7 +35,7 @@ import java.net.*;
  * 3. only one node failure
  */
 @InterfaceAudience.Private
-class OptimalReairReconstructor extends StripedReconstructor
+class RANReconstructor extends StripedReconstructor
         implements Runnable {
 
     private StripedWriter stripedWriter;
@@ -55,7 +55,7 @@ class OptimalReairReconstructor extends StripedReconstructor
     private DataInputStream orIn;
     // RAN-end
 
-    OptimalReairReconstructor(ErasureCodingWorker worker,
+    RANReconstructor(ErasureCodingWorker worker,
             StripedReconstructionInfo stripedReconInfo) {
         super(worker, stripedReconInfo);
         

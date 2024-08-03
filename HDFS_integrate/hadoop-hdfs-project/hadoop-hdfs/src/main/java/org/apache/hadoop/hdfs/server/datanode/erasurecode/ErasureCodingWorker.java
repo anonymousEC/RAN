@@ -136,7 +136,7 @@ public final class ErasureCodingWorker {
         // RAN-begin
         int chunkNodeFlag = getConf().getInt("dfs.datanode.ec.RAN.chunknode", 0);
         if (chunkNodeFlag > 0 && chunkNodeFlag < 3) {
-          final OptimalReairReconstructor task = new OptimalReairReconstructor(this, stripedReconInfo);
+          final RANReconstructor task = new RANReconstructor(this, stripedReconInfo);
           xmitsSubmitted = Math.max((int) (task.getXmits() * xmitWeight), 1);
           getDatanode().incrementXmitsInProcess(xmitsSubmitted);
           stripedReconstructionPool.submit(task);
