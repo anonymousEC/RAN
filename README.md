@@ -82,13 +82,14 @@ MUL_FAIL_NUM=1                      # Number of data failures  for muti-failure 
 ```Shell
 ########
 ######## ecRepair修改为erasureCoding 后续添加write和update更加封边
+##修改HDFS的install.sh
 ########
 # Download hadoop-3.1.4-src on available mirror
 cd /home/ecRepair/ && wget https://archive.apache.org/dist/hadoop/common/hadoop-3.1.4/hadoop-3.1.4-src.tar.gz
 tar -xzvf hadoop-3.1.4-src.tar.gz
 
 # Integrating RAN to HDFS
-/home/ecRepair/RAN/script/RAN_HDFS_install.sh 101 107
+/home/ecRepair/RAN/HDFS_integrate/RAN_install_HDFS.sh 101 107
 
 # Prepare the compilation environment in docker
 cp /home/ecRepair/RAN/HDFS_integrate/compile/* /home/ecRepair/hadoop-3.1.4-src/
@@ -106,7 +107,7 @@ cp -rf /home/ecRepair/hadoop-3.1.4-src/hadoop-dist/target/hadoop-3.1.4/ /home/ec
 cp /home/ecRepair/RAN/HDFS_integrate/hadoop/* /home/ecRepair/hadoop-3.1.4/etc/hadoop/
 
 # Copy the HDFS program to other nodes
-/home/ecRepair/RAN/script/scp_same.sh 102 121 /home/ecRepair/hadoop-3.1.4/ 
+/home/ecRepair/RAN/script/scp_same.sh 102 107 /home/ecRepair/hadoop-3.1.4/ 
 
 ```
 
@@ -118,7 +119,7 @@ vim /home/ych/hadoop-3.1.4/etc/hadoop/hdfs-site.xml
 /home/ecRepair/RAN/script/scp_same.sh 102 121 /home/ecRepair/hadoop-3.1.4/etc/hadoop/hdfs-site.xml
 
 # repair prepare
-./prepare_hdfs.sh
+/home/ecRepair/RAN/HDFS_integrate/data_prepare_HDFS.sh 101 107
 
 # Use SSH to log in to any storage node and erase data (we recommend creating a new command window named SW, the original window is CW)
 ssh root@192.168.7.102

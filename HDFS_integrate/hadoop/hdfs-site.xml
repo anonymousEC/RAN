@@ -58,7 +58,7 @@
   <!-- For the convenience of testing, the use of this integration must meet restrictions. 
  Since they do not affect the test results, they only increase the flexibility of the integration. 
  They will be solved and developeds later.
-1. Fixed: encoding strategy, chunksize, cellsize. If you need to modify, you should also modify the configuration of RAN
+1. Fixed configuration: encoding strategy, chunksize, cellsize. If you need to modify, you should also modify the configuration of RAN
 2. the size of repaired file = Multiples of k * cellsize
 3. only one node failure -->
   <property>
@@ -68,7 +68,7 @@
   </property>
   <property>
     <name>dfs.datanode.ec.RAN.method</name>
-    <value>0</value>
+    <value>3</value>
     <description>repair method: 0-tradition,1-RP, 2-NetEC, 3-OtimalRepair</description>
   </property>
   <property>

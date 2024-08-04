@@ -1,10 +1,21 @@
 #!/bin/bash
 
+# Check if the correct number of arguments is provided
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 START_NODE END_NODE"
+  exit 1
+fi
+
+set -e # command fail will make scripe exit: add [false] Breakpoints
+# Arguments
+START_NODE=$1
+END_NODE=$2
+
 echo "stop HDFS"
 stop-dfs.sh
 
 echo "delete data and format Namenode"
-/home/ecRepair/RAN/script/same_command.sh 101 121 "rm -r /home/ecRepair/hadoopData/dfs"
+/home/ecRepair/RAN/script/same_command.sh $START_NODE $END_NODE "rm -r /home/ecRepair/hadoopData/dfs"
 hdfs namenode -format
 
 echo "start HDFS"
@@ -20,11 +31,10 @@ hdfs ec -enablePolicy -policy RS-2-2-1024k
 hdfs ec -setPolicy -policy RS-2-2-1024k -path /ec
 
 echo "Upload files to the /ec directory"
-cd /home/ecRepair
-for (( i=1; i<=160; i++ ))
+for (( i=1; i<=8; i++ ))
 do
-    hdfs dfs -put 128MB_src /ec/128MB_dst${i}
-    echo "hdfs dfs -put 128MB_src /ec/128MB_dst${i}"
+    hdfs dfs -put /home/ecRepair/RAN/test_file/write/128MB_src /ec/128MB_dst${i}
+    echo "hdfs dfs -put /home/ecRepair/RAN/test_file/write/128MB_src /ec/128MB_dst${i}"
 done
 
 echo "check the file block information"
