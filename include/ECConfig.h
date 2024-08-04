@@ -79,7 +79,7 @@
 
 /* HDFS integrate */
 #define HDFS_FLAG 0
-#define HDFS_DEBUG 1
+#define HDFS_DEBUG 0
 #define EC_HDFS_COORDINATOR_PORT 8400 // EC network port between hdfs and coordinator
 #define HDFS_MAX_BP_COUNT FULL_RECOVERY_STRIPE_MAX_NUM
 #define MAX_LINES (HDFS_MAX_BP_COUNT * 10)

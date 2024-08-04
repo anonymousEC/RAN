@@ -69,7 +69,7 @@
   <property>
     <name>dfs.datanode.ec.RAN.method</name>
     <value>0</value>
-    <description>repair method: 0-tradition,1-RP, 2-NetEC, 3-OtimalRepair</description>
+    <description>repair method: 0-tradition,1-RP, 2-NetEC, 3-RAN</description>
   </property>
   <property>
     <name>RAN.coordinator.ip</name>

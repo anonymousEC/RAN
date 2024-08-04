@@ -140,7 +140,7 @@ public final class ErasureCodingWorker {
           xmitsSubmitted = Math.max((int) (task.getXmits() * xmitWeight), 1);
           getDatanode().incrementXmitsInProcess(xmitsSubmitted);
           stripedReconstructionPool.submit(task);
-          // RAN-end
+        // RAN-end
         } else { // default
 
           final StripedBlockReconstructor task = new StripedBlockReconstructor(this, stripedReconInfo);

@@ -24,7 +24,7 @@ import java.net.*;
  * 2. node reconstructor: reconstruct all striped block of one node in the
  * striped block group
  * 
- * support four repair method: tradition RP NetEC OtimalRepair
+ * support four repair method: tradition RP NetEC RAN
  * 
  * For the convenience of testing, the use of this integration must meet
  * restrictions. Since they do not affect the test results, they only increase
@@ -47,7 +47,7 @@ class RANReconstructor extends StripedReconstructor
     private String[] lostBlockPoolNames = null;
 
     private int chunkNodeFlag = 0;// 0-init,1-chun,2-node,-1-error
-    private int methodFlag = 0;// 0-tradition,1-RP, 2-NetEC, 3-OtimalRepair
+    private int methodFlag = 0;// 0-tradition,1-RP, 2-NetEC, 3-RAN
     private String coordinatorIP = null;
     private int coordinatorPort = 8400;
     private Socket socket = null;

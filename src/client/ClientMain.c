@@ -20,6 +20,7 @@ int eachStripeFailNodeNum[FULL_RECOVERY_STRIPE_MAX_NUM] = {0}, eachStripeFailNod
 /* HDFS */
 hdfs_info_t *HDFSInfo = NULL;
 pthread_mutex_t HDFSFullRecoveLock;
+pthread_mutex_t HDFSDegradedReadLock;
 int HDFSFullRecoveFlag = 0;
 
 /* mul use variable */
@@ -1443,13 +1444,6 @@ void *handleHDFS(void *arg)
 
     int cmd = -2;
     Recv(clientFd, &cmd, sizeof(int), "recv hdfs-cmd");
-
-    for (int i = 31; i >= 0; i--)
-    {
-        int bit = (cmd >> i) & 1;
-        printf("%d", bit);
-    }
-    printf("\n");
     cmd = ntohl(cmd);
     printf("cmd = %d \n", cmd); // if cmd>0, cmd is reconstructor worker - no use now
 
@@ -1487,7 +1481,7 @@ void *handleHDFS(void *arg)
 
         if (chunk_node_flag == 1) // single chunk repair
         {
-
+            pthread_mutex_lock(&HDFSDegradedReadLock);
             if (getHDFSDegradedReadInfo(blockFileName) == EC_ERROR)
                 ERROR_RETURN_NULL("fail hdfs repair info");
             FailNodeIndex = HDFSInfo->failNodeIndex; // chunk index
@@ -1503,6 +1497,7 @@ void *handleHDFS(void *arg)
                 strcpy(argv[1], "-rdne");
             if (handleClientMain(argc, argv) == EC_ERROR)
                 ERROR_RETURN_VALUE("handle main");
+            pthread_mutex_unlock(&HDFSDegradedReadLock);
         }
         else if (chunk_node_flag == 2)
         {
@@ -1633,6 +1628,7 @@ static int HDFSCoordinator(int argc, char **argv)
 
     if (!HDFS_FLAG)
         ERROR_RETURN_VALUE("HDFS_FLAG is false");
+    pthread_mutex_init(&HDFSDegradedReadLock, NULL);
     pthread_mutex_init(&HDFSFullRecoveLock, NULL);
     printf("Please waiting hdfs information synchronization! (need start-dfs, otherwise rerun) \n");
     PRINT_FLUSH;
@@ -1658,6 +1654,7 @@ static int HDFSCoordinator(int argc, char **argv)
     pthreadCreate(&HDFStid, NULL, handleHDFSTest, NULL);
     pthreadJoin(HDFStid, NULL);
 #endif
+    pthread_mutex_destroy(&HDFSDegradedReadLock);
     pthread_mutex_destroy(&HDFSFullRecoveLock);
     return EC_OK;
 }

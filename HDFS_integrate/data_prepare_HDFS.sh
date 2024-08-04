@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Check if the correct number of arguments is provided
-if [ "$#" -ne 2 ]; then
-  echo "Usage: $0 START_NODE END_NODE"
+if [ "$#" -ne 3 ]; then
+  echo "Usage: $0 START_NODE END_NODE STRIPE_NUM"
   exit 1
 fi
 
@@ -31,7 +31,7 @@ hdfs ec -enablePolicy -policy RS-2-2-1024k
 hdfs ec -setPolicy -policy RS-2-2-1024k -path /ec
 
 echo "Upload files to the /ec directory"
-for (( i=1; i<=8; i++ ))
+for (( i=1; i<=$3; i++ ))
 do
     hdfs dfs -put /home/ecRepair/RAN/test_file/write/128MB_src /ec/128MB_dst${i}
     echo "hdfs dfs -put /home/ecRepair/RAN/test_file/write/128MB_src /ec/128MB_dst${i}"
