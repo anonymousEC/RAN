@@ -80,6 +80,9 @@ MUL_FAIL_NUM=1                      # Number of data failures  for muti-failure 
 | PND                | `c7gn.8xlarge`    | 1            | `192.168.7.100`                    | Programmable network device |
 
 ```Shell
+########
+######## ecRepair修改为erasureCoding 后续添加write和update更加封边
+########
 # Download hadoop-3.1.4-src on available mirror
 cd /home/ecRepair/ && wget https://archive.apache.org/dist/hadoop/common/hadoop-3.1.4/hadoop-3.1.4-src.tar.gz
 tar -xzvf hadoop-3.1.4-src.tar.gz
@@ -87,26 +90,20 @@ tar -xzvf hadoop-3.1.4-src.tar.gz
 # Integrating RAN to HDFS
 /home/ecRepair/RAN/script/RAN_HDFS_install.sh 101 107
 
-
-ecRepair修改为erasureCoding 后续添加write和update更加封边
-
+# Prepare the compilation environment in docker
 cp /home/ecRepair/RAN/HDFS_integrate/compile/* /home/ecRepair/hadoop-3.1.4-src/
 cd hadoop-3.1.4-src &&  chmod a+x *.sh
 ./docker_build.sh
 ./docker_run.sh
+
+# Compile HDFS source code in docker
 mvn package -e -DskipTests -Dtar -Dmaven.javadoc.skip=true -Drequire.isal -Disal.lib=/home/root/isa-l/ -Dbundle.isal=true -Pdist,native -DskipShade
-
-#d
-
-
-# Compile HDFS source code
-cd ${HADOOP_SRC_DIR}; mvn package -DskipTests -Dtar -Dmaven.javadoc.skip=true -Drequire.isal -Disal.lib=/home/ecRepair/RAN/tools/isa-l/ -Dbundle.isal=true -Pdist,native -DskipShade -e
 
 # Copy the HDFS program to the specified folder
 cp -rf /home/ecRepair/hadoop-3.1.4-src/hadoop-dist/target/hadoop-3.1.4/ /home/ecRepair/
 
 # HDFS Configuration: core-site.xml, hadoop-env.sh, hdfs-site.xml, user_ec_policies.xml, workers
-cp /home/ecRepair/RAN/HDFS_integrate/hadoop-4node3worker/* /home/ecRepair/hadoop-3.1.4/etc/hadoop/
+cp /home/ecRepair/RAN/HDFS_integrate/hadoop/* /home/ecRepair/hadoop-3.1.4/etc/hadoop/
 
 # Copy the HDFS program to other nodes
 /home/ecRepair/RAN/script/scp_same.sh 102 121 /home/ecRepair/hadoop-3.1.4/ 
