@@ -174,10 +174,10 @@ int getHDFSInfo()
             // Debugging output
             printf("Extracted len substring: '%s'\n", str);
 
-            HDFSInfo.len[bpIndex] = atoi(str); // len
+            HDFSInfo->len[bpIndex] = atoi(str); // len
 
             // Debugging output
-            printf("HDFSInfo.len[%d]: %d\n", bpIndex, HDFSInfo.len[bpIndex]);
+            printf("HDFSInfo.len[%d]: %d\n", bpIndex, HDFSInfo->len[bpIndex]);
 
             int bIndex = 0;
             start = strstr(lines[i], "[blk_") + 1;
