@@ -147,14 +147,37 @@ int getHDFSInfo()
     {
         if (strstr(lines[i], "BP-") != NULL && strstr(lines[i], "erasure-coded: policy=RS-") == NULL)
         {
+            // bpIndex++;
+            // char *start = strstr(lines[i], "len=") + 4;
+            // char *end = strstr(start, " Live");
+            // int len = end - start;
+            // char str[MAX_PATH_LEN];
+            // strncpy(str, start, len);
+            // str[len] = '\0';
+            // HDFSInfo->len[bpIndex] = atoi(str); // len
+
             bpIndex++;
             char *start = strstr(lines[i], "len=") + 4;
             char *end = strstr(start, " Live");
             int len = end - start;
+
+            // Debugging output
+            printf("Extracting len from: '%s'\n", lines[i]);
+            printf("Start pointer: '%s'\n", start);
+            printf("End pointer: '%s'\n", end);
+            printf("Length of len substring: %d\n", len);
+
             char str[MAX_PATH_LEN];
             strncpy(str, start, len);
             str[len] = '\0';
-            HDFSInfo->len[bpIndex] = atoi(str); // len
+
+            // Debugging output
+            printf("Extracted len substring: '%s'\n", str);
+
+            HDFSInfo.len[bpIndex] = atoi(str); // len
+
+            // Debugging output
+            printf("HDFSInfo.len[%d]: %d\n", bpIndex, HDFSInfo.len[bpIndex]);
 
             int bIndex = 0;
             start = strstr(lines[i], "[blk_") + 1;
