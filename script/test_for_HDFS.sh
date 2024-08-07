@@ -12,7 +12,7 @@ EC_K=2                              # Number of data chunks
 EC_M=2                              # Number of parity chunks
 CHUNK_SIZE_MB=64                    # Chunk size in MB
 SLICE_SIZE_KB=1024                  # Slice size in KB
-WANT_REPAIRED_NUM=5                 # Number of repaired chunks
+WANT_REPAIRED_NUM=40                 # Number of repaired chunks
 MUL_FAIL_NUM=1                      # Number of data failures
 
 NODE_NUM=$((END_NODE - START_NODE + 1))

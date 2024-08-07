@@ -80,7 +80,7 @@ source /etc/profile
 
 # Prepare the compilation environment in docker
 cp /home/ecRepair/RAN/HDFS_integrate/compile/* /home/ecRepair/hadoop-3.1.4-src/
-cd hadoop-3.1.4-src &&  chmod a+x *.sh
+cd /home/ecRepair/hadoop-3.1.4-src &&  chmod a+x *.sh
 ./docker_build.sh
 ./docker_run.sh
 
@@ -107,20 +107,20 @@ cp /home/ecRepair/RAN/HDFS_integrate/hadoop/* /home/ecRepair/hadoop-3.1.4/etc/ha
 #start RAN coordinator 
 /home/ecRepair/RAN/script/test_for_HDFS.sh
 
-#Create two new command windows, named SW and CW
-# Use SSH to log in to any storage node and erase data [SW]
+#Create two new terminals, named ST and CT
+# Use SSH to log in to any storage node and erase data [ST]
 ssh root@192.168.7.102
 cd /home/ecRepair/hadoopData && find -type f -name "blk_*" ! -name "*meta" -exec md5sum {} \;
-#Delete specified blocks [SW]
+#Delete specified blocks [ST]
 cd /home/ecRepair/hadoopData && find -type f -name "blk_*" ! -name "*meta" -exec rm {} \; 
-#Monitor repair results [SW]
+#Monitor repair results [ST]
 tail -f /home/ecRepair/hadoop-3.1.4/logs/*.log | grep RAN
 
-# Restart and wait for the heartbeat to trigger [CW]
-# Trigger can be viewed in the original window and SW window
+# Restart and wait for the heartbeat to trigger [CT]
+# Trigger can be viewed in the original window and ST window
 stop-dfs.sh && start-dfs.sh && hdfs fsck /ec -files -blocks -locations
 
-# Restart and check repair result [CW]
+# Restart and check repair result [CT]
 stop-dfs.sh && start-dfs.sh && hdfs fsck /ec -files -blocks -locations 
 ```
 
@@ -135,8 +135,8 @@ echo -e "slave5\nslave6" | tee -a /home/ecRepair/hadoop-3.1.4/etc/hadoop/workers
 vim /home/ecRepair/hadoop-3.1.4/etc/hadoop/hdfs-site.xml 
 /home/ecRepair/RAN/script/scp_same.sh 101 107 /home/ecRepair/hadoop-3.1.4/etc/hadoop/hdfs-site.xml
 
-# data prepare: 8 stripes
-/home/ecRepair/RAN/HDFS_integrate/data_prepare_HDFS.sh 101 107 8
+# data prepare: 5 stripes
+/home/ecRepair/RAN/HDFS_integrate/data_prepare_HDFS.sh 101 107 5
 
 #The remaining steps are the same as for degraded read
 ```

@@ -147,37 +147,15 @@ int getHDFSInfo()
     {
         if (strstr(lines[i], "BP-") != NULL && strstr(lines[i], "erasure-coded: policy=RS-") == NULL)
         {
-            // bpIndex++;
-            // char *start = strstr(lines[i], "len=") + 4;
-            // char *end = strstr(start, " Live");
-            // int len = end - start;
-            // char str[MAX_PATH_LEN];
-            // strncpy(str, start, len);
-            // str[len] = '\0';
-            // HDFSInfo->len[bpIndex] = atoi(str); // len
-
             bpIndex++;
             char *start = strstr(lines[i], "len=") + 4;
             char *end = strstr(start, " Live");
             int len = end - start;
-
-            // Debugging output
-            printf("Extracting len from: '%s'\n", lines[i]);
-            printf("Start pointer: '%s'\n", start);
-            printf("End pointer: '%s'\n", end);
-            printf("Length of len substring: %d\n", len);
-
             char str[MAX_PATH_LEN];
             strncpy(str, start, len);
             str[len] = '\0';
-
-            // Debugging output
-            printf("Extracted len substring: '%s'\n", str);
-
-            HDFSInfo->len[bpIndex] = atoi(str); // len
-
-            // Debugging output
-            printf("HDFSInfo.len[%d]: %d\n", bpIndex, HDFSInfo->len[bpIndex]);
+            HDFSInfo->len[bpIndex] = atoi(str);                                // len
+            printf("HDFSInfo.len[%d]: %d\n", bpIndex, HDFSInfo->len[bpIndex]); // ych-test
 
             int bIndex = 0;
             start = strstr(lines[i], "[blk_") + 1;
@@ -187,6 +165,7 @@ int getHDFSInfo()
                 len = end - start;
                 strncpy(HDFSInfo->bName[bpIndex][bIndex], start, len);
                 HDFSInfo->bName[bpIndex][bIndex][len] = '\0';
+                printf("HDFSInfo->bName[%d][%d]: %s\n", bpIndex, bIndex, HDFSInfo->bName[bpIndex][bIndex]); // ych-test
                 bIndex++;
                 start = strstr(end, "blk_");
             }
@@ -203,6 +182,7 @@ int getHDFSInfo()
                 strncpy(str, start, len);
                 str[len] = '\0';
                 HDFSInfo->bNodeIndex[bpIndex][bIndex] = atoi(str);
+                printf("HDFSInfo->bNodeIndex[%d][%d]: %d\n", bpIndex, bIndex, HDFSInfo->bNodeIndex[bpIndex][bIndex]); // ych-test
                 bIndex++;
                 start = strstr(end, "[");
             }
