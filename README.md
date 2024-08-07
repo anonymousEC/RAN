@@ -98,7 +98,7 @@ cp /home/ecRepair/RAN/HDFS_integrate/hadoop/* /home/ecRepair/hadoop-3.1.4/etc/ha
 
 ```
 
-### 3-2  Run for degraded read
+### 3-2  Run
 
 ```shell
 # data prepare: 1 stripes
@@ -122,21 +122,4 @@ stop-dfs.sh && start-dfs.sh && hdfs fsck /ec -files -blocks -locations
 
 # Restart and check repair result [CT]
 stop-dfs.sh && start-dfs.sh && hdfs fsck /ec -files -blocks -locations 
-```
-
-### 3-3  Run for full-node recovery
-
-```shell
-# Setting repair algorithm
-# Add slave5 and slave6
-echo -e "slave5\nslave6" | tee -a /home/ecRepair/hadoop-3.1.4/etc/hadoop/workers
-/home/ecRepair/RAN/script/scp_same.sh 101 107 /home/ecRepair/hadoop-3.1.4/etc/hadoop/workers 
-# Modify to node repairs
-vim /home/ecRepair/hadoop-3.1.4/etc/hadoop/hdfs-site.xml 
-/home/ecRepair/RAN/script/scp_same.sh 101 107 /home/ecRepair/hadoop-3.1.4/etc/hadoop/hdfs-site.xml
-
-# data prepare: 5 stripes
-/home/ecRepair/RAN/HDFS_integrate/data_prepare_HDFS.sh 101 107 5
-
-#The remaining steps are the same as for degraded read
 ```
