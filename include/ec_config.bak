@@ -1,0 +1,218 @@
+#ifndef EC_CONFIG_H
+#define EC_CONFIG_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/time.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <ifaddrs.h>
+
+#include <isa-l.h>
+#include "share_func.h"
+#include "file_opt.h"
+#include "network_transfer.h"
+#include "bandwidth.h"
+#include "repair.h"
+#include "exp.h"
+
+/* experimente*/
+#define EXP_TIMES 3
+
+/* EC configure */
+#define EC_K 3             // k of k+m EC
+#define EC_M 2             // m of k+m EC, larger than 1
+#define EC_N (EC_K + EC_M) // n of k+m EC, n>k
+#define EC_X 2
+#define EC_A (EC_N + EC_X)       // number of all storage nodes
+#define EC_W 8                   // finite field 2^w
+#define CHUNK_SIZE (1 * 1048576) // unit Byte
+#define SLICE_SIZE (64 * 1024)   // unit Byte
+
+/* bandwidth */
+#define NUM_BAND_MAX 5           // Number of heterogeneous network environments in bandwidth.cpp
+#define EC_A_MAX 20          //  Maximum EC_A
+#define MAX_LINE_LENGTH 1000 // MAX line length in bandwidth file
+#define BAND_LOCATION 1      // Test bandwidth is the BAND_LOCATION-th in the bandwidth file
+
+/* repair */
+#define NUM_ENCODING_CPU 2
+#define NUM_ENCODING_CPU_MAX 64
+#define STORAGENODE_FAIL 0 // Position relative to STORAGENODES_START_IP_ADDR: [0,EC_N-1]
+#define FLAG_WRITE_REPAIR 1
+#define FULL_RECOVERY_STRIPE_MAX_NUM 30
+#define MUL_FAIL_NUM 2   // must <= EC_M
+#define MUL_FAIL_START 0 // failed node [MUL_FAIL_START...MUL_FAIL_NUM]
+
+/* file */
+#define SCRIPT_PATH "script"                                             // saved executable file
+#define BUILD_PATH "build"                                               // saved executable file
+#define WRITE_PATH "test_file/write/"                                    // src_file and dst_file saved path
+#define READ_PATH "test_file/read/"                                      // src_file and dst_file saved path
+#define WRITE_RAND "test_file/write/rand_"                               // src_file and dst_file saved path
+#define FILE_SIZE_PATH "test_file/file_size/file_size_"                  // file_size file saved path
+#define FILE_SIZE_RAND "test_file/file_size/file_size_r_"                // file_size file saved path
+#define FILE_STRIPE_BITMAP "test_file/stripe_bitmap/file_stripe_bitmap_" // bitmap file saved path
+#define BANDWIDTH_PATH "test_file/bandwidth/"                            // nodes bandwidth saved path
+#define REPAIR_PATH "test_file/repair/"                                  // repair data saved path
+#define REPAIR_RAND "test_file/repair/rand_"                             // repair data saved path
+#define MAX_PATH_LEN 256                                                 // Max length of file path
+
+/* network */
+#define IP_PREFIX "192.168.7."                  // storages ip prefix
+#define STORAGENODES_START_IP_ADDR 102          // end_ip=start_ip+k+m, ip_addr_start (1-255,default ip_addr_end=ip_addr_start+k+m)
+#define CLIENT_COORDINATOR_NAMENODE_IP_ADDR 101 // client/coordinator/namenode ip
+#define PNETDEVICE_IP_ADDR 120                  // pnetdevice ip
+#define EC_CLIENT_STORAGENODES_PORT 8000        // EC network port between client and storagenodes
+#define EC_STORAGENODES_PORT 8100               // EC network port between storagenodes and storagenodes
+#define EC_PND_STORAGENODES_PORT 8200           // EC network port between programmable network device and storagenodes
+#define EC_PND_CLIENT_PORT 8300                 // EC network port between programmable network device and client
+#define MUL_PORT_NUM 4                          // To achieve higher network bandwidth on EC2, such as 25Gbps
+
+#define SEND 0
+#define RECV 1
+
+/* other */
+#define INT_MAX 2147483647
+
+#define EC_ERROR -1
+#define EC_OK 0
+
+#define ERROR_RETURN_VALUE(message)                                   \
+    do                                                                \
+    {                                                                 \
+        fprintf(stderr, "[%s:%d] %s\n", __FILE__, __LINE__, message); \
+        perror("OS_errorcode_information");                           \
+        fflush(stdout);                                               \
+        fflush(stderr);                                               \
+        return EC_ERROR;                                              \
+    } while (0)
+
+#define ERROR_RETURN_NULL(message)                                    \
+    do                                                                \
+    {                                                                 \
+        fprintf(stderr, "[%s:%d] %s\n", __FILE__, __LINE__, message); \
+        perror("OS_errorcode_information");                           \
+        fflush(stdout);                                               \
+        fflush(stderr);                                               \
+        return NULL;                                                  \
+    } while (0)
+
+#define PRINT_FLUSH     \
+    do                  \
+    {                   \
+        fflush(stdout); \
+        fflush(stderr); \
+    } while (0)
+
+#define CALCULATE_TIME(start, end, result)                                                          \
+    do                                                                                              \
+    {                                                                                               \
+        clock_gettime(CLOCK_MONOTONIC, &end);                                                       \
+        result = ((end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec)) / 1000 / 1000; \
+    } while (0)
+
+#define ADD_TIME(start, end, result)                                                                 \
+    do                                                                                               \
+    {                                                                                                \
+        clock_gettime(CLOCK_MONOTONIC, &end);                                                        \
+        result += ((end.tv_sec - start.tv_sec) * 1e9 + (end.tv_nsec - start.tv_nsec)) / 1000 / 1000; \
+    } while (0)
+
+typedef struct metadata_s // chunk metadata and data
+{
+    int sockfd;   // network socket fd
+    int opt_type; // 0=ec_write, 1=ec_read,
+                  // 2=rodt_fail/redt_fail, 3=rodt_healthy/redt_healthy,
+                  // 4=rodp_fail/redp_fail, 5=rodp_healthy/redp_healthy
+                  // 6=rode_fail/rede_fail/pnd_netec, 7=rode_healthy/rede_healthy/pnd_netec
+                  // 8=rodn_fail/redn_fail/pnd_new, 9=rodn_healthy/redn_fail/pnd_new
+                  // 10=roft_fail/reft_fail, 11=roft_healthy/reft_healthy,
+                  // 12=rofr_fail/refr_fail, 13=rofr_healthy/refr_healthy,
+                  // 14=rofe_fail/refe_fail/pnd_netec, 15=rofe_healthy/refe_healthy/pnd_netec
+                  // 16=rofn_fail/refn_fail/pnd_new, 17=rofn_healthy/refn_healthy/pnd_new
+    int opt_flag; // 0-df,1-cs
+    int dst_node; // destination node
+    int src_node; // source node
+
+    int exp_index;
+
+    char *data;                                   // chunk data or block data
+    int size;                                     // data size
+    char dst_filename_storagenodes[MAX_PATH_LEN]; // dst filename on storages
+} metadata_t;
+
+typedef struct mul_thread_encode_s
+{
+    int chunksize;
+    int k;
+    int num_need_repair_data;
+    unsigned char *g_tbls;
+    char **data;
+    char **coding;
+} mul_thread_encode_t;
+
+typedef struct sgl_port_net_s
+{
+    int node_num;    // Number of nodes requested
+    int *sockfd_arr; // Specify port
+    char **data;     // The data location that each node needs to save
+    int *size;       // The size each node needs to transfer
+    int mode;        // mode: 0-send, 1-recv
+} sgl_port_net_t;
+
+typedef struct new_record_s
+{
+    int pos_index_size;
+    int (*pos_index)[6];
+    int division_num;
+    int *division_lines;
+    unsigned char ***g_tbls_arr_arr;
+} new_record_t;
+
+typedef struct new_record_fn_s
+{
+    int stripe_num;
+    int (*pos_index)[EC_N - 1][6];
+    int(*division_num);
+    int (*division_lines)[2 * EC_N];
+    int index_fr_node[2][EC_A][FULL_RECOVERY_STRIPE_MAX_NUM];
+    unsigned char ***g_tbls_arr_arr;
+    unsigned char ****g_tbls_arr3;
+} new_record_fn_t;
+
+typedef struct mul_port_net_s
+{
+    int node_num;          // Number of nodes requested
+    int **sockfd_arr_mul;  // mul port
+    char **data_recv;      // The data location that each node needs to save
+    char **data_send;      // The data location that each node needs to save
+    unsigned char *g_tbls; // for decoding
+    int flag_recv;         // 0-no recv,1 yes recv
+    int *p_slice_index;    // cur recv slice_index
+    int total_slice_num;   // total slice_num
+    int mode;              // mode: 0-send, 1-recv
+    int flag_encode;       // 0-no,1 yes
+
+    /* mul node */
+    char ***data_recv_bucket;    // recv
+    queue_t *slice_index_recv_k; // slice index for recv k
+    int **slice_bitmap;          // record
+    int cur_node;
+    int cur_stripe;
+    int n_fail_node[FULL_RECOVERY_STRIPE_MAX_NUM][EC_M];
+    int n_fail_num[FULL_RECOVERY_STRIPE_MAX_NUM];
+    int *index_nr;
+
+} mul_port_net_t;
+
+typedef void (*type_handle_func)(metadata_t *, int);
+
+#endif

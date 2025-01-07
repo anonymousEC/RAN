@@ -1,0 +1,39 @@
+#!/usr/bin/expect
+
+if {[llength $argv] < 3} {
+    puts "Usage: $argv0 <password> <start> <end>"
+    exit 1
+}
+
+set timeout 20
+set password [lindex $argv 0]
+set start [lindex $argv 1]
+set end [lindex $argv 2]
+set ipBase "192.168.7."
+
+set hosts ""
+for {set i $start} {$i <= $end} {incr i} {
+    lappend hosts $ipBase$i
+}
+
+foreach host $hosts {
+    #spawn cat ~/.ssh/id_rsa.pub | ssh root@$host 'cat >> ~/.ssh/authorized_keys'
+    spawn ssh-copy-id -i /root/.ssh/id_rsa.pub root@$host
+    expect {
+        "yes/no" {
+            send "yes\r"
+            exp_continue
+        }
+        "password:" {
+            send "$password\r"
+        }
+        eof {
+            if {[catch {wait} result]} {
+                puts "Error copying key to $host: $result"
+            } else {
+                puts "Successfully copied key to $host"
+            }
+        }
+    }
+    sleep 2
+}

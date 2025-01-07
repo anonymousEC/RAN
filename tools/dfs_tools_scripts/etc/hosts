@@ -1,0 +1,31 @@
+127.0.0.1 localhost
+127.0.1.1 ecRepair
+
+192.168.7.101 master
+192.168.7.102 slave1
+192.168.7.103 slave2
+192.168.7.104 slave3
+192.168.7.105 slave4
+192.168.7.106 slave5
+192.168.7.107 slave6
+192.168.7.108 slave7
+192.168.7.109 slave8
+192.168.7.110 slave9
+192.168.7.111 slave10
+192.168.7.112 slave11
+192.168.7.113 slave12
+192.168.7.114 slave13
+192.168.7.115 slave14
+192.168.7.116 slave15
+192.168.7.117 slave16
+192.168.7.118 slave17
+192.168.7.119 slave18
+192.168.7.120 slave19
+192.168.7.121 slave20
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters

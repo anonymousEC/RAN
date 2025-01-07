@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>/home/ecRepair/hadoopData/dfs/name</value>
+    <description>Determines where on the local filesystem the DFS name node
+      should store the name table(fsimage).</description>
+  </property>
+
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>/home/ecRepair/hadoopData/dfs/data</value>
+    <description>Determines where on the local filesystem an DFS data node
+  should store its blocks.</description>
+  </property>
+
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+    <description>The number of block replication, 
+    the default configuration is 3, 
+    should be greater than the number of datanode machines</description>
+  </property>
+
+  <property>
+    <name>dfs.permissions.enabled</name>
+    <value>false</value>
+    <description>
+    If "true", enable permission checking in HDFS.
+    If "false", permission checking is turned off,
+    but all other behavior is unchanged.
+    </description>
+  </property>
+  <property>
+    <name>dfs.webhdfs.enabled</name>
+    <value>true</value>
+  </property>
+
+
+  <!-- RAN -->
+  <!-- For the convenience of testing, the use of this integration must meet restrictions. 
+ Since they do not affect the test results, they only increase the flexibility of the integration. 
+ They will be solved and developeds later.
+1. Fixed: encoding strategy, chunksize, cellsize. If you need to modify, you should also modify the configuration of RAN
+2. the size of repaired file = Multiples of k * cellsize
+3. only one node failure -->
+  <property>
+    <name>dfs.datanode.ec.RAN.chunknode</name>
+    <value>1</value>
+    <description>0-HDFS,1-chunk repair,2-node repairs.</description>
+  </property>
+  <property>
+    <name>dfs.datanode.ec.RAN.method</name>
+    <value>0</value>
+    <description>repair method: 0-tradition,1-RP, 2-NetEC, 3-RAN</description>
+  </property>
+  <property>
+    <name>RAN.coordinator.ip</name>
+    <value>192.168.7.101</value>
+    <description>coordinator ip</description>
+  </property>
+  <property>
+    <name>RAN.coordinator.port</name>
+    <value>8400</value>
+    <description>coordinator port</description>
+  </property>
+
+
+
+
+</configuration>
