@@ -1,8 +1,12 @@
 # RAN
 
-This is the implementation of the RAN prototype described in our paper, "RAN: Accelerating Data Repair Using Available Nodes in Erasure-Coded Storage," currently under review at IEEE INFOCOM 2025. RAN is a repair algorithm for erasure coding, designed to significantly reduce the repair performance penalties caused by network transfers.
+This is the implementation of the RAN prototype described in our paper, "RAN: Accelerating Data Repair Using Available Nodes in Erasure-Coded Storage," currently under review at ACM ICS 2025. RAN is a repair algorithm for erasure coding, designed to significantly reduce the repair performance penalties caused by network transfers.
 
-## 0. Example Deployment
+## Status
+
+![Ubuntu 24.04](https://img.shields.io/badge/Ubuntu%2024.04-black?style=flat-square) ![Test Passed](https://img.shields.io/badge/Test-Passing-brightgreen?style=flat-square)
+
+## 1. Example Deployment
 
 Instances: 7 `m6i.large` instances and 1 `c7gn.8xlarge` instance on Amazon EC2. If there are not enough nodes, please modify the relevant parameters. All commands are executed as root user in the client node.
 
@@ -12,7 +16,7 @@ Instances: 7 `m6i.large` instances and 1 `c7gn.8xlarge` instance on Amazon EC2. 
 | Storage Nodes | `m6i.large`       | 6            | `192.168.7.102` to `192.168.7.107` | Storage nodes (also act as request nodes) |
 | PND           | `c7gn.8xlarge`    | 1            | `192.168.7.100`                    | Programmable network device               |
 
-## 1. Install
+## 2. Install
 
 ```Shell
 # Install the required tools and libraries for metadata node
@@ -34,7 +38,7 @@ cd /home/ecRepair/RAN/script && chmod a+x *
 ./create_env.sh 100 107
 ```
 
-## 2. Run
+## 3. Run
 
 ```Shell
 # Compile and run: If the programmable network device is of x86 architecture, modify make_run.sh
