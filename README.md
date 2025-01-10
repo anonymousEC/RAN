@@ -1,6 +1,6 @@
 # RAN
 
-This is the implementation of the RAN prototype described in our paper, "RAN: Accelerating Data Repair Using Available Nodes in Erasure-Coded Storage," currently under review at ACM ICS 2025. RAN is a repair algorithm for erasure coding, designed to significantly reduce the repair performance penalties caused by network transfers.
+This is the implementation of the RAN prototype described in our paper, "RAN: Accelerating Data Repair with Available Nodes in  Erasure-Coded Storage", currently under review at ACM ICS 2025. RAN is a repair algorithm for erasure coding, designed to significantly reduce the repair performance penalties caused by network transfers.
 
 ## Status
 
